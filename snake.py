@@ -95,6 +95,30 @@ turtle.listen()
 
 
 
+turtle.register_shape("trash.gif") 
+food = turtle.clone()
+food.shape("trash.gif") 
+
+#Locations of food
+food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
+food_stamps = []
+
+#generates "food"
+    
+food_pos_num = 0
+for this_food_pos in food_pos :
+    food.penup()
+    food.goto(food_pos[food_pos_num])
+    food.pendown()
+    food.stamp()
+    food_stamps.append(food.pos())
+    food_pos_num += 1
+    if food_pos_num == 4:
+        break
+
+print(food_stamps)
+    
+    
 def move_snake():
     my_pos = snake.pos()
     x_pos = my_pos[0]
