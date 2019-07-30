@@ -1,3 +1,4 @@
+
                         
 import turtle
 import random #We'll need this later in the lab
@@ -105,16 +106,18 @@ food_stamp = []
 
 #generates "food"
     
+
 food_pos_num = 0
-for this_food_pos in food_pos :
+for this_food_pos  in food_pos:
     food.penup()
     food.goto(food_pos[food_pos_num])
     food.pendown()
-    food.stamp()
-    food_stamp.append(food.pos())
+    food_stamp_id=food.stamp()
+    food_stamp.append(food_stamp_id)
     food_pos_num += 1
     if food_pos_num == 4:
         break
+
  
 def make_food():
     #The screen positions go from -SIZE/2 to +SIZE/2
@@ -140,6 +143,10 @@ def make_food():
    
     
 def move_snake():
+    for i in pos_list[1:-1]:
+            if i == snake.pos():
+                print("what are you blind? you ate yourself! game over!")
+                quit()
     my_pos = snake.pos()
     x_pos = my_pos[0]
     y_pos = my_pos[1]
@@ -149,34 +156,35 @@ def move_snake():
     new_stamp()
     if snake.pos() in food_pos:
         food_index=food_pos.index(snake.pos())#What does this do?
-        food.clearstamp(food_stamp[food_index]) #Remove eaten food stamp
+        food.clearstamp(food_stamp[food_index])
         food_pos.pop(food_index) #Remove eaten food position
         food_stamp.pop(food_index) #Remove eaten food stamp
         print("You have eaten the food!")
+        print(new_stamp())
+        
     remove_tail()
     turtle.ontimer(move_snake,TIME_STEP)   
-
     
+
   
-   
 
 
     # The next three lines check if the snake is hitting the 
     # right edge.
     if new_x_pos >= RIGHT_EDGE:
-         print("You hit the right edge you suck! Game over!")
-         quit()
+        print("You hit the right edge you suck! my grandma plays better than you! Game over!")
+        quit()
 
     elif new_y_pos >= UP_EDGE:
-        print("You hit the top edge you suck! Game over!")
+        print("You hit the top edge you suck! my grandma plays better than you! Game over!")
         quit()
 
     elif new_y_pos <= DOWN_EDGE:
-        print("You hit the botom edge you suck! Game over!")
+        print("You hit the botom edge you suck! my grandma plays better than you! Game over!")
         quit()
     elif new_x_pos <= LEFT_EDGE:
-        print("You hit the bottom edge you suck! Game over!")
-
+        print("You hit the bottom edge you suck! my grandma plays better than you! Game over!")
+        quit()
         
  
     if snake.direction == "Up":
@@ -194,13 +202,19 @@ def move_snake():
         snake.goto(x_pos - SQUARE_SIZE, y_pos)
         print("You moved left!")
   
-if len(food_stamp) <= 4 :
-    make_food() 
-   
+    if len(food_stamp) <= 3 :
+
+
+        make_food()
+
+
+            
+  
     
 move_snake()
 
   
 turtle.mainloop()
+
 
 
