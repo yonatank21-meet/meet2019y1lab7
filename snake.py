@@ -12,7 +12,7 @@ turtle.setup(SIZE_X, SIZE_Y) #It's the turtle window
 turtle.penup()
 turtle.bgcolor("wheat")
 SQUARE_SIZE = 20
-START_LENGTH = 10
+START_LENGTH = 0
 TIME_STEP = 100
 
 #Initialize lists
@@ -22,10 +22,11 @@ food_pos = []
 food_stamp = []
 
 #Set up positions (x,y) of boxes that make up the snake
-
+turtle.register_shape("closedmouth.gif")
+turtle.register_shape("openmouth.gif")
 turtle.register_shape("larva.gif")
 snake = turtle.clone()
-snake.shape("larva.gif")
+snake.shape("openmouth.gif")
 
 #Hide the turtle object (it's an arrow - we don't need to see it)
 turtle.hideturtle()
@@ -194,12 +195,19 @@ def make_mine():
     mine_stamp.append(mine.stamp())
 
 food_eaten_count = 0
+def pacmananimation():
+    snake.shape("openmouth.gif")
+    snake.shape("closedmouth.gif")
+    
+
+
 
 def move_snake():
     global food_eaten_count
     for i in pos_list[1:-1]:
             if i == snake.pos():
                 print("what are you blind? you ate yourself! game over!")
+                print("your score was " + str(food_eaten_count) + " you can do better!!")
                 quit()
     my_pos = snake.pos()
     x_pos = my_pos[0]
@@ -207,7 +215,10 @@ def move_snake():
     new_pos = snake.pos()
     new_x_pos = new_pos[0]
     new_y_pos = new_pos[1]
+    snake.shape("closedmouth.gif")
     new_stamp()
+    snake.shape("openmouth.gif")
+    
     if snake.pos() in food_pos:
         food_index=food_pos.index(snake.pos())#What does this do?
         food.clearstamp(food_stamp[food_index])
@@ -231,6 +242,10 @@ def move_snake():
         print(new_stamp())
 
     elif snake.pos() in mine_pos:
+        if len(stamp_list)<=4:
+            print("BOOM YOU ARE DEAD!!!!!!")
+            print("your score was " + str(food_eaten_count) + " you can do better!!")
+            quit()
         mine_index=mine_pos.index(snake.pos())
         mine.clearstamp(mine_stamp[mine_index])
         mine_pos.pop(mine_index) 
@@ -240,6 +255,7 @@ def move_snake():
         remove_tail()
         remove_tail()
     remove_tail()
+    turtle.ontimer(pacmananimation,TIME_STEP)
     turtle.ontimer(move_snake,TIME_STEP)   
     
 
@@ -250,17 +266,21 @@ def move_snake():
     # right edge.
     if new_x_pos >= RIGHT_EDGE:
         print("You hit the right edge you suck! my grandma plays better than you! Game over!")
+        print("your score was " + str(food_eaten_count) + " you can do better!!")
         quit()
 
     elif new_y_pos >= UP_EDGE:
         print("You hit the top edge you suck! my grandma plays better than you! Game over!")
+        print("your score was " + str(food_eaten_count) + " you can do better!!")
         quit()
 
     elif new_y_pos <= DOWN_EDGE:
         print("You hit the botom edge you suck! my grandma plays better than you! Game over!")
+        print("your score was " + str(food_eaten_count) + " you can do better!!")
         quit()
     elif new_x_pos <= LEFT_EDGE:
         print("You hit the bottom edge you suck! my grandma plays better than you! Game over!")
+        print("your score was " + str(food_eaten_count) + " you can do better!!")
         quit()
         
  
