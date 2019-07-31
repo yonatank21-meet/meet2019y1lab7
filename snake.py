@@ -12,7 +12,7 @@ turtle.setup(SIZE_X, SIZE_Y) #It's the turtle window
 turtle.penup()
 
 SQUARE_SIZE = 20
-START_LENGTH = 10
+START_LENGTH = 5
 TIME_STEP = 100
 
 #Initialize lists
@@ -23,7 +23,7 @@ food_stamp = []
 
 #Set up positions (x,y) of boxes that make up the snake
 snake = turtle.clone()
-snake.shape("square")
+snake.shape("circle")
 
 #Hide the turtle object (it's an arrow - we don't need to see it)
 turtle.hideturtle()
@@ -96,14 +96,20 @@ turtle.listen()
 
 
 
-turtle.register_shape("trash.gif") 
+turtle.register_shape("pizza.gif") 
 food = turtle.clone()
-food.shape("trash.gif") 
+food.shape("pizza.gif") 
+
+turtle.register_shape("taco.gif")
+super_food = turtle.clone()
+super_food.shape("taco.gif")
+
 
 #Locations of food
 food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
 food_stamp = []
-
+super_food_pos = []
+super_food_stamp = []
 #generates "food"
     
 
@@ -141,8 +147,27 @@ def make_food():
         ##2.WRITE YOUR CODE HERE: Add the food turtle's position to the food positions list
         ##3.WRITE YOUR CODE HERE: Add the food turtle's stamp to the food stamps list
    
+#makes super 
+def make_superfood():
+
+    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
+    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)+1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)-1
     
+    food_x = random.randint(min_x,max_x)*SQUARE_SIZE
+    food_y = random.randint(min_y,max_y)*SQUARE_SIZE
+
+    super_food.penup()
+    super_food.goto(food_x, food_y)
+    super_food_pos.append(super_food.pos())
+    super_food_stamp.append(super_food.stamp())
+
+
+food_eaten_count = 0
+
 def move_snake():
+    global food_eaten_count
     for i in pos_list[1:-1]:
             if i == snake.pos():
                 print("what are you blind? you ate yourself! game over!")
@@ -161,7 +186,19 @@ def move_snake():
         food_stamp.pop(food_index) #Remove eaten food stamp
         print("You have eaten the food!")
         print(new_stamp())
-        
+        food_eaten_count += 1
+          
+    elif snake.pos() in super_food_pos:
+        super_food_index=super_food_pos.index(snake.pos())
+        super_food.clearstamp(super_food_stamp[super_food_index])
+        super_food_pos.pop(super_food_index) 
+        super_food_stamp.pop(super_food_index)
+        print("you have eaten super food!!!!!")
+        print(new_stamp())
+        print(new_stamp())
+        print(new_stamp())
+        print(new_stamp())
+        print(new_stamp())
     remove_tail()
     turtle.ontimer(move_snake,TIME_STEP)   
     
@@ -206,8 +243,12 @@ def move_snake():
 
 
         make_food()
+    
+    
+    
 
-
+if food_eaten_count % 5:
+                make_superfood()
             
   
     
