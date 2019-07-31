@@ -10,9 +10,9 @@ SIZE_Y=500
 turtle.setup(SIZE_X, SIZE_Y) #It's the turtle window  
                              #size.    
 turtle.penup()
-
+turtle.bgcolor("wheat")
 SQUARE_SIZE = 20
-START_LENGTH = 5
+START_LENGTH = 10
 TIME_STEP = 100
 
 #Initialize lists
@@ -22,8 +22,10 @@ food_pos = []
 food_stamp = []
 
 #Set up positions (x,y) of boxes that make up the snake
+
+turtle.register_shape("larva.gif")
 snake = turtle.clone()
-snake.shape("circle")
+snake.shape("larva.gif")
 
 #Hide the turtle object (it's an arrow - we don't need to see it)
 turtle.hideturtle()
@@ -104,12 +106,18 @@ turtle.register_shape("taco.gif")
 super_food = turtle.clone()
 super_food.shape("taco.gif")
 
-
+turtle.register_shape("mine.gif")
+mine = turtle.clone()
+mine.shape("mine.gif")
 #Locations of food
 food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
 food_stamp = []
 super_food_pos = []
 super_food_stamp = []
+mine_pos = []
+mine_stamp = []
+
+
 #generates "food"
     
 
@@ -164,6 +172,27 @@ def make_superfood():
     super_food_stamp.append(super_food.stamp())
 
 
+#makes mines!
+def make_mine():
+    #The screen positions go from -SIZE/2 to +SIZE/2
+    #But we need to make food pieces only appear on game squares
+    #So we cut up the game board into multiples of SQUARE_SIZE.
+    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
+    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)+1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)-1
+    
+    #Pick a position that is a random multiple of SQUARE_SIZE
+    food_x = random.randint(min_x,max_x)*SQUARE_SIZE
+    food_y = random.randint(min_y,max_y)*SQUARE_SIZE
+
+        ##1.WRITE YOUR CODE HERE: Make the food turtle go to the randomly-generated
+    
+    mine.penup()##position
+    mine.goto(food_x, food_y)
+    mine_pos.append(mine.pos())
+    mine_stamp.append(mine.stamp())
+
 food_eaten_count = 0
 
 def move_snake():
@@ -187,7 +216,8 @@ def move_snake():
         print("You have eaten the food!")
         print(new_stamp())
         food_eaten_count += 1
-          
+   
+                
     elif snake.pos() in super_food_pos:
         super_food_index=super_food_pos.index(snake.pos())
         super_food.clearstamp(super_food_stamp[super_food_index])
@@ -199,6 +229,16 @@ def move_snake():
         print(new_stamp())
         print(new_stamp())
         print(new_stamp())
+
+    elif snake.pos() in mine_pos:
+        mine_index=mine_pos.index(snake.pos())
+        mine.clearstamp(mine_stamp[mine_index])
+        mine_pos.pop(mine_index) 
+        mine_stamp.pop(mine_index)
+        print("BOOM You stepped on a mine!!!!!")
+        remove_tail()
+        remove_tail()
+        remove_tail()
     remove_tail()
     turtle.ontimer(move_snake,TIME_STEP)   
     
@@ -239,17 +279,16 @@ def move_snake():
         snake.goto(x_pos - SQUARE_SIZE, y_pos)
         print("You moved left!")
   
-    if len(food_stamp) <= 3 :
+    if food_eaten_count % 5 == 0 and len(super_food_stamp) <= 0 and len(food_stamp) <= 3:
+        make_superfood()
 
-
+    if len(food_stamp) <= 3:
         make_food()
-    
-    
-    
 
-if food_eaten_count % 5:
-                make_superfood()
-            
+    
+    
+    if len(mine_stamp) <=2:
+        make_mine()
   
     
 move_snake()
