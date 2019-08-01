@@ -80,7 +80,7 @@ def left():
    
 
 def right():
-    snake.direction="Right"
+    snake.direction="Right"    
     print("you pressed the right key")
   
 
