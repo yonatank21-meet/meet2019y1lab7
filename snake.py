@@ -1,9 +1,9 @@
 
                         
 import turtle
-import random #We'll need this later in the lab
+import random 
 
-turtle.tracer(1,0) #This helps the turtle move more smoothly
+turtle.tracer(1,0)
 
 SIZE_X=800
 SIZE_Y=500
@@ -12,6 +12,7 @@ turtle.setup(SIZE_X, SIZE_Y) #It's the turtle window
 turtle.penup()
 turtle.bgcolor("wheat")
 SQUARE_SIZE = 20
+
 START_LENGTH = 0
 TIME_STEP = 100
 
@@ -24,7 +25,6 @@ food_stamp = []
 #Set up positions (x,y) of boxes that make up the snake
 turtle.register_shape("closedmouth.gif")
 turtle.register_shape("openmouth.gif")
-turtle.register_shape("larva.gif")
 snake = turtle.clone()
 snake.shape("openmouth.gif")
 
@@ -187,7 +187,7 @@ def make_mine():
     food_x = random.randint(min_x,max_x)*SQUARE_SIZE
     food_y = random.randint(min_y,max_y)*SQUARE_SIZE
 
-        ##1.WRITE YOUR CODE HERE: Make the food turtle go to the randomly-generated
+      
     
     mine.penup()##position
     mine.goto(food_x, food_y)
@@ -220,7 +220,7 @@ def move_snake():
     snake.shape("openmouth.gif")
     
     if snake.pos() in food_pos:
-        food_index=food_pos.index(snake.pos())#What does this do?
+        food_index=food_pos.index(snake.pos())
         food.clearstamp(food_stamp[food_index])
         food_pos.pop(food_index) #Remove eaten food position
         food_stamp.pop(food_index) #Remove eaten food stamp
@@ -254,6 +254,8 @@ def move_snake():
         remove_tail()
         remove_tail()
         remove_tail()
+        food_eaten_count -= 3
+
     remove_tail()
     turtle.ontimer(pacmananimation,TIME_STEP)
     turtle.ontimer(move_snake,TIME_STEP)   
