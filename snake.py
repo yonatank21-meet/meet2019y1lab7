@@ -309,7 +309,7 @@ def move_snake():
 
     
     
-    if len(mine_stamp) <=2:
+    if len(mine_stamp) <=6:
         make_mine()
   
     
